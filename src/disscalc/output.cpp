@@ -4,7 +4,6 @@
 
 namespace disscalc
 {
-static
 void print_command_line_error(std::ostream& out, CommandLineError error)
 {
 	out << get_error_header();
@@ -36,41 +35,12 @@ void print_command_line_error(std::ostream& out, CommandLineError error)
 	out << '\n';
 }
 
-void print_command_line_errors(
-	std::ostream& out, std::span<CommandLineError const> errors
-)
-{
-	for (auto error : errors)
-	{
-		print_command_line_error(out, error);
-	}
-}
-
-void print_error(std::ostream& out, std::string_view error)
+void print_generic_error(std::ostream& out, std::string_view error)
 {
 	out << get_error_header() << error << '\n';
 }
 
-void print_dissonance_table(
-	std::ostream& out,
-	char separator,
-	std::span<Partial const> partials,
-	double start,
-	double delta,
-	double end
-)
-{
-	for (; start <= end; start += delta)
-	{
-		out << start
-			<< separator
-			<< compute_dissonance(partials, start)
-			<< '\n';
-	}
-}
-
-[[nodiscard]]
-std::string_view get_usage_message(void)
+void print_usage_message(std::ostream& out)
 {
 	constexpr std::string_view usage_message =
 		"Usage: disscalc [--help] [--output=<file>] [--format=<format>]\n"
@@ -106,7 +76,8 @@ std::string_view get_usage_message(void)
 		"                                     must match the number of partials, and\n"
 		"                                     each nth amplitude will be matched with\n"
 		"                                     the nth partial.\n";
-	return usage_message;
+
+	out << usage_message;
 }
 
 [[nodiscard]]

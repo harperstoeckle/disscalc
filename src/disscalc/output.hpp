@@ -10,36 +10,16 @@
 
 namespace disscalc
 {
-/// Print a list of command-line parsing errors to `out`.
-void print_command_line_errors(
-	std::ostream& out, std::span<CommandLineError const> errors
-);
+/// Print a command-line error.
+void print_command_line_error(std::ostream& out, CommandLineError error);
 
 /// Print a generic error.
-void print_error(std::ostream& out, std::string_view error);
+void print_generic_error(std::ostream& out, std::string_view error);
 
-/** Print the dissonance table.
- *
- * Print to `out`. The interval and dissonance are separated by `separator`.
- * `partials` are the partials, and `start`, `delta`, and `end` represent the
- * lower bound, distance between tested intervals, and upper bound
- * respectively.
- */
-void print_dissonance_table(
-	std::ostream& out,
-	char separator,
-	std::span<Partial const> partials,
-	double start,
-	double delta,
-	double end
-);
-
-/// Get the usage message.
-[[nodiscard]]
-std::string_view get_usage_message(void);
+/// Print the usage message to `out`.
+void print_usage_message(std::ostream& out);
 
 /// Get the start of an error line
-[[nodiscard]]
 std::string_view get_error_header(void);
 } // namespace disscalc
 

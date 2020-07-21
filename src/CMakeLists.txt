@@ -3,6 +3,7 @@ add_library(disscalc-internal STATIC
 	disscalc/command-line.cpp disscalc/command-line.hpp
 	disscalc/dissonance.cpp disscalc/dissonance.hpp
 	disscalc/output.cpp disscalc/output.hpp
+	disscalc/table.hpp
 )
 set_target_properties(disscalc-internal
 	PROPERTIES

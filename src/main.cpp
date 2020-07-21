@@ -1,6 +1,7 @@
 #include "disscalc/command-line.hpp"
 #include "disscalc/dissonance.hpp"
 #include "disscalc/output.hpp"
+#include "disscalc/table.hpp"
 
 #include <algorithm>
 #include <cassert>
@@ -20,29 +21,41 @@ bool validate_options(disscalc::CommandLineOptions const& options)
 		&& options.format != "tsv"
 	)
 	{
-		disscalc::print_error(std::cerr, "Format must be csv or tsv");
+		disscalc::print_generic_error(
+			std::cerr,
+			"Format must be csv or tsv"
+		);
 		valid = false;
 	}
 	if (options.start <= 0.0)
 	{
-		disscalc::print_error(std::cerr, "Start must be greater than zero");
+		disscalc::print_generic_error(
+			std::cerr,
+			"Start must be greater than zero"
+		);
 		valid = false;
 	}
 	if (options.delta <= 0.0)
 	{
-		disscalc::print_error(std::cerr, "Delta must be greater than zero");
+		disscalc::print_generic_error(
+			std::cerr,
+			"Delta must be greater than zero"
+		);
 		valid = false;
 	}
 	if (options.end <= 0.0)
 	{
-		disscalc::print_error(std::cerr, "End must be greater than zero");
+		disscalc::print_generic_error(
+			std::cerr,
+			"End must be greater than zero"
+		);
 		valid = false;
 	}
 
 	auto const not_positive = [](double x) noexcept { return x <= 0.0; };
 	if (std::ranges::any_of(options.partials, not_positive))
 	{
-		disscalc::print_error(
+		disscalc::print_generic_error(
 			std::cerr,
 			"Partials must be greater than zero"
 		);
@@ -50,7 +63,7 @@ bool validate_options(disscalc::CommandLineOptions const& options)
 	}
 	if (std::ranges::any_of(options.amplitudes, not_positive))
 	{
-		disscalc::print_error(
+		disscalc::print_generic_error(
 			std::cerr,
 			"Amplitudes must be greater than zero"
 		);
@@ -59,7 +72,7 @@ bool validate_options(disscalc::CommandLineOptions const& options)
 
 	if (options.partials.size() != options.amplitudes.size())
 	{
-		disscalc::print_error(
+		disscalc::print_generic_error(
 			std::cerr,
 			"There must be the same number of partials and amplitudes"
 		);
@@ -95,16 +108,22 @@ bool output_table(disscalc::CommandLineOptions const& options)
 	char const separator = options.format.has_value()
 		? get_separator_from_format(*options.format)
 		: ',';
+	
+	// Compute the dissonance of an interval given the current context.
+	auto const compute_this_dissonance = [&partials](double d) noexcept
+	{
+		return disscalc::compute_dissonance(partials, d);
+	};
 
 	if (!options.output_file_name.has_value())
 	{
-		disscalc::print_dissonance_table(
+		disscalc::print_table_as_dsv(
 			std::cout,
-			separator,
-			partials,
 			options.start,
 			options.delta,
-			options.end
+			options.end,
+			compute_this_dissonance,
+			separator
 		);
 		return true;
 	}
@@ -113,19 +132,21 @@ bool output_table(disscalc::CommandLineOptions const& options)
 	std::ofstream output_file(std::string(*options.output_file_name));
 	if (!output_file)
 	{
-		disscalc::print_error(std::cerr, "Could not open output file");
+		disscalc::print_generic_error(
+			std::cerr,
+			"Could not open output file"
+		);
 		return false;
 	}
 
-	disscalc::print_dissonance_table(
+	disscalc::print_table_as_dsv(
 		output_file,
-		separator,
-		partials,
 		options.start,
 		options.delta,
-		options.end
+		options.end,
+		compute_this_dissonance,
+		separator
 	);
-
 	return true;
 }
 
@@ -135,13 +156,16 @@ int main(int argc, char const* argv[])
 
 	if (options.show_help)
 	{
-		std::cout << disscalc::get_usage_message();
+		disscalc::print_usage_message(std::cout);
 		return 0;
 	}
 
 	if (!options.errors.empty())
 	{
-		disscalc::print_command_line_errors(std::cerr, options.errors);
+		for (auto error : options.errors)
+		{
+			disscalc::print_command_line_error(std::cerr, error);
+		}
 		return 1;
 	}
 
