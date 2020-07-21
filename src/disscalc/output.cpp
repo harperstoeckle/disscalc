@@ -45,7 +45,7 @@ void print_usage_message(std::ostream& out)
 	constexpr std::string_view usage_message =
 		"Usage: disscalc [--help] [--output=<file>] [--format=<format>]\n"
 		"                [--start=<number>] [--delta=<number>] [--quantity=<number>]\n"
-		"                [--end=<number>] -p <partials>... -a <amplitudes>...\n"
+		"                [--end=<number>] -p <number>... -a <number>...\n"
 		"\n"
 		"Generate a dissonance curve for the given timbre.\n"
 		"\n"
@@ -76,7 +76,6 @@ void print_usage_message(std::ostream& out)
 		"                                     must match the number of partials, and\n"
 		"                                     each nth amplitude will be matched with\n"
 		"                                     the nth partial.\n";
-
 	out << usage_message;
 }
 
