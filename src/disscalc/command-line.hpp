@@ -64,8 +64,6 @@ struct CommandLineOptions
 /// Parse command-line options.
 [[nodiscard]]
 CommandLineOptions parse_options(int argc, char const* argv[]);
-
-/// Parse
 } // namespace disscalc
 
 #endif
