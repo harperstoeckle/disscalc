@@ -42,8 +42,8 @@ void print_table_as_dsv(
 {
 	for (; first <= last; first += delta)
 	{
-		out << first << delimiter <<
-			static_cast<double>(std::invoke(func, first))
+		out << first << delimiter
+			<< static_cast<double>(std::invoke(func, first))
 			<< '\n';
 	}
 }
