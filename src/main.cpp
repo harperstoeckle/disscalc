@@ -69,6 +69,14 @@ bool validate_options(disscalc::CommandLineOptions const& options)
 		);
 		valid = false;
 	}
+	if (std::ranges::any_of(options.extra_values, not_positive))
+	{
+		disscalc::print_generic_error(
+			std::cerr,
+			"Extra intervals must be greater than zero"
+		);
+		valid = false;
+	}
 
 	if (options.partials.size() != options.amplitudes.size())
 	{
@@ -123,7 +131,8 @@ bool output_table(disscalc::CommandLineOptions const& options)
 			options.delta,
 			options.end,
 			compute_this_dissonance,
-			separator
+			separator,
+			options.extra_values
 		);
 		return true;
 	}
@@ -145,7 +154,8 @@ bool output_table(disscalc::CommandLineOptions const& options)
 		options.delta,
 		options.end,
 		compute_this_dissonance,
-		separator
+		separator,
+		options.extra_values
 	);
 	return true;
 }

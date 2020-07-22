@@ -224,6 +224,27 @@ void apply_option(
 		}
 	};
 
+	/*
+	 * Try to parse each value as a double and insert it into `option`. Add
+	 * errors for any values that are invalid.
+	 */
+	auto try_insert_doubles = [&](auto& option) mutable
+	{
+		for (auto arg : parsed_option.values)
+		{
+			if (auto value = parse_double(arg))
+			{
+				option.insert(*value);
+				continue;
+			}
+
+			options.errors.emplace_back(
+				arg,
+				CommandLineErrorType::invalid_number
+			);
+		}
+	};
+
 	if (parsed_option.invalid)
 	{
 		options.errors.emplace_back(
@@ -262,6 +283,10 @@ void apply_option(
 	else if (flag == "-a")
 	{
 		try_append_doubles(options.amplitudes);
+	}
+	else if (flag == "-x")
+	{
+		try_insert_doubles(options.extra_values);
 	}
 	else
 	{

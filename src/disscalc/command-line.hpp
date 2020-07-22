@@ -2,6 +2,7 @@
 #define DISSCALC_COMMAND_LINE_HPP_INCLUDED
 
 #include <optional>
+#include <set>
 #include <string_view>
 #include <vector>
 
@@ -57,6 +58,8 @@ struct CommandLineOptions
 
 	std::vector<double> partials;
 	std::vector<double> amplitudes;
+
+	std::set<double> extra_values;
 	
 	std::vector<CommandLineError> errors;
 };
