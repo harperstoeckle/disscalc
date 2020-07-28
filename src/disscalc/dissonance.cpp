@@ -5,32 +5,6 @@
 
 namespace disscalc
 {
-[[nodiscard]]
-auto create_partials(
-	std::span<double const> frequencies,
-	std::span<double const> amplitudes
-) -> std::vector<Partial>
-{
-	assert(frequencies.size() == amplitudes.size());
-
-	std::vector<Partial> partials;
-	partials.reserve(frequencies.size());
-
-	for (
-		auto f_begin = std::cbegin(frequencies),
-			f_end = std::cend(frequencies),
-			a_begin = std::cbegin(amplitudes),
-			a_end = std::cend(amplitudes);
-		(f_begin != f_end) && (a_begin != a_end);
-		++ f_begin, ++a_begin
-	)
-	{
-		partials.emplace_back(*f_begin, *a_begin);
-	}
-
-	return partials;
-}
-
 // Compute the dissonance between two partials.
 [[nodiscard]] static constexpr
 double compute_dissonance_between_partials(Partial a, Partial b) noexcept
