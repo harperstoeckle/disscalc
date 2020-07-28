@@ -1,6 +1,7 @@
 # Other than main, convert the sources into a static library for easy testing.
 add_library(disscalc-internal STATIC
-	disscalc/command-line.cpp disscalc/command-line.hpp
+	disscalc/args-parsing.cpp disscalc/args-parsing.hpp
+	disscalc/options.cpp disscalc/options.hpp
 	disscalc/dissonance.cpp disscalc/dissonance.hpp
 	disscalc/output.cpp disscalc/output.hpp
 	disscalc/table.hpp

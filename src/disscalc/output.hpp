@@ -1,7 +1,7 @@
 #ifndef DISSCALC_OUTPUT_HPP_INCLUDED
 #define DISSCALC_OUTPUT_HPP_INCLUDED
 
-#include "disscalc/command-line.hpp"
+#include "disscalc/options.hpp"
 #include "disscalc/dissonance.hpp"
 
 #include <iostream>

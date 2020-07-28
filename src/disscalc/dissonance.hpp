@@ -13,16 +13,6 @@ struct Partial
 	double amplitude;
 };
 
-/** Create a vector of partials from frequencies and amplitudes.
- *
- * The frequencies and amplitudes lists must be the same length.
- */
-[[nodiscard]]
-auto create_partials(
-	std::span<double const> frequencies,
-	std::span<double const> amplitudes
-) -> std::vector<Partial>;
-
 /// Compute dissonance of a frequency based on a list of partials.
 [[nodiscard]]
 double compute_dissonance(

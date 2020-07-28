@@ -1,8 +1,7 @@
-#ifndef DISSCALC_COMMAND_LINE_HPP_INCLUDED
-#define DISSCALC_COMMAND_LINE_HPP_INCLUDED
+#ifndef DISSCALC_ARGS_PARSING_HPP_INCLUDED
+#define DISSCALC_ARGS_PARSING_HPP_INCLUDED
 
-#include <optional>
-#include <set>
+#include <span>
 #include <string_view>
 #include <vector>
 
@@ -25,48 +24,31 @@
  * single-letter flags. If a flag is specified in the long form, such as
  * "--key=value" or "--key", it may only have zero or one values.
  */
-
 namespace disscalc
 {
-enum struct CommandLineErrorType
+// Contents of a single extracted flag and its values.
+struct ParsedOption
 {
-	unknown_arg, ///< Argument not recognized in its context.
-	invalid_number, ///< Incorrectly formatted number.
-	no_value_provided, ///< No value provided for a flag expecting one.
-	too_many_values ///< Too many values provided to a flag.
-};
-
-/// Error caused by invalid command line option.
-struct CommandLineError
-{
-	/// Text of the argument causing the error.
-	std::string_view argument_text;
-	CommandLineErrorType type;
-};
-
-/// Contains values of program options.
-struct CommandLineOptions
-{
-	bool show_help = false;
-
-	std::optional<std::string_view> output_file_name;
-	std::optional<std::string_view> format;
-
-	double start = 1.0;
-	double delta = 0.01;
-	double end = 2.0;
-
-	std::vector<double> partials;
-	std::vector<double> amplitudes;
-
-	std::set<double> extra_values;
+	// Name of the flag. For example, in "-k value", "-k" is the flag.
+	std::string_view flag;
 	
-	std::vector<CommandLineError> errors;
+	/*
+	 * Sequence of values listed after the flag. For example, in "-a 1 2",
+	 * "1" and "2" are the values.
+	 */
+	std::vector<std::string_view> values;
+
+	// Set to true when `flag` is not formatted as a flag properly.
+	bool invalid = false;
 };
 
-/// Parse command-line options.
+/** Extract the next command-line option.
+ *
+ * Produce the next option, consisting of a flag and one or more values. `args`
+ * is shortened so that it no longer contains the arguments for that option.
+ */
 [[nodiscard]]
-CommandLineOptions parse_options(int argc, char const* argv[]);
+ParsedOption extract_next_option(std::span<char const* const>& args);
 } // namespace disscalc
 
 #endif

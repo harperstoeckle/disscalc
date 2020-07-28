@@ -11,21 +11,33 @@ void print_command_line_error(std::ostream& out, CommandLineError error)
 	switch (error.type)
 	{
 	case CommandLineErrorType::unknown_arg:
-		out << "Unrecognized flag: " << std::quoted(error.argument_text);
+		out << "unrecognized flag: " << std::quoted(error.argument_text);
 		break;
 		
 	case CommandLineErrorType::invalid_number:
-		out << "Not a valid number: " << std::quoted(error.argument_text);
+		out << "not a valid number: " << std::quoted(error.argument_text);
 		break;
 
 	case CommandLineErrorType::no_value_provided:
-		out << "No argument provided for "
+		out << "no argument provided for "
 			<< std::quoted(error.argument_text);
 		break;
 	
 	case CommandLineErrorType::too_many_values:
-		out << "Too many argument provided for "
+		out << "too many argument provided for "
 			<< std::quoted(error.argument_text);
+		break;
+
+	case CommandLineErrorType::not_positive:
+		out << error.argument_text << "must be greater than zero";
+		break;
+
+	case CommandLineErrorType::list_not_positive:
+		out << error.argument_text << "must all be greater than zero";
+		break;
+
+	case CommandLineErrorType::generic:
+		out << error.argument_text;
 		break;
 
 	default:
