@@ -30,18 +30,15 @@ auto create_partials(
 	std::vector<Partial> partials;
 	partials.reserve(frequencies.size());
 
-	for (
-		auto f_begin = std::cbegin(frequencies),
-			f_end = std::cend(frequencies),
-			a_begin = std::cbegin(amplitudes),
-			a_end = std::cend(amplitudes);
-		(f_begin != f_end) && (a_begin != a_end);
-		++ f_begin, ++a_begin
-	)
-	{
-		partials.emplace_back(*f_begin, *a_begin);
-	}
-
+	std::ranges::transform(
+		frequencies,
+		amplitudes,
+		std::back_inserter(partials),
+		[](double f, double a) noexcept
+		{
+			return Partial{f, a};
+		}
+	);
 	return partials;
 }
 
