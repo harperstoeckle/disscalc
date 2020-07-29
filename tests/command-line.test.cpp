@@ -136,4 +136,20 @@ TEST_CASE("Parse command line options", "[command-line]")
 	auto p8 = o8.partials();
 	REQUIRE(approx_equals(freqs_view(p8), DVec{1, 3.5, 10078.5}));
 	REQUIRE(approx_equals(amps_view(p8), DVec{8.7, 5.2, 9999}));
+
+	std::vector<char const*> v9 = {
+		"disscalc",
+		"-p", "1.0", "what",
+		"-a", "3.4",
+		"-x", "9.7", "8.5"
+	};
+	disscalc::ProgramOptions o9(v9.size(), v9.data());
+	REQUIRE(!o9.is_valid());
+
+	std::vector<char const*> v10 = {
+		"disscalc",
+		"--start=hello"
+	};
+	disscalc::ProgramOptions o10(v10.size(), v10.data());
+	REQUIRE(!o10.is_valid());
 }
