@@ -109,6 +109,9 @@ public:
 	char delimiter(void) const noexcept;
 
 private:
+	// Add an error to the error list and mark these options as invalid.
+	void add_error(std::string_view text, CommandLineErrorType type);
+
 	/*
 	 * Try to apply the given option, adding any errors and setting
 	 * `valid_` to false on failure.
@@ -160,11 +163,10 @@ private:
 			return;
 		}
 
-		errors_.emplace_back(
+		add_error(
 			arg,
 			CommandLineErrorType::invalid_number
 		);
-		valid_ = false;
 	}
 
 	/*
@@ -184,11 +186,10 @@ private:
 				continue;
 			}
 
-			errors_.emplace_back(
+			add_error(
 				arg,
 				CommandLineErrorType::invalid_number
 			);
-			valid_ = false;
 		}
 	}
 

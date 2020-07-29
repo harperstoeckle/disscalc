@@ -63,17 +63,22 @@ auto parse_double(std::string_view str) noexcept -> std::optional<double>
 	return result;
 }
 
+void ProgramOptions::add_error(std::string_view text, CommandLineErrorType type)
+{
+	errors_.emplace_back(text, type);
+	valid_ = false;
+}
+
 void ProgramOptions::apply_option(ParsedOption const& parsed_option)
 {
 	std::string_view const flag = parsed_option.flag;
 
 	if (parsed_option.invalid)
 	{
-		errors_.emplace_back(
+		add_error(
 			flag,
 			CommandLineErrorType::unknown_arg
 		);
-		valid_ = false;
 	}
 	else if (flag == "--help" || flag == "-h")
 	{
@@ -118,11 +123,10 @@ void ProgramOptions::apply_option(ParsedOption const& parsed_option)
 	}
 	else
 	{
-		errors_.emplace_back(
+		add_error(
 			flag,
 			CommandLineErrorType::unknown_arg
 		);
-		valid_ = false;
 	}
 }
 
@@ -130,7 +134,7 @@ bool ProgramOptions::ensure_has_single_value(ParsedOption const& option)
 {
 	if (option.values.empty())
 	{
-		errors_.emplace_back(
+		add_error(
 			option.flag,
 			CommandLineErrorType::no_value_provided
 		);
@@ -138,7 +142,7 @@ bool ProgramOptions::ensure_has_single_value(ParsedOption const& option)
 	}
 	if (option.values.size() != 1)
 	{
-		errors_.emplace_back(
+		add_error(
 			option.flag,
 			CommandLineErrorType::no_value_provided
 		);
@@ -156,62 +160,55 @@ void ProgramOptions::validate(void)
 		&& format_ != "tsv"
 	)
 	{
-		errors_.emplace_back(
+		add_error(
 			"format must be csv or tsv",
 			CommandLineErrorType::generic
 		);
-		valid_ = false;
 	}
 	if (delta_ <= 0.0)
 	{
-		errors_.emplace_back(
+		add_error(
 			"delta",
 			CommandLineErrorType::not_positive
 		);
-		valid_ = false;
 	}
 	if (end_ <= 0.0)
 	{
-		errors_.emplace_back(
+		add_error(
 			"end interval",
 			CommandLineErrorType::not_positive
 		);
-		valid_ = false;
 	}
 
 	auto const not_positive = [](double x) noexcept { return x <= 0.0; };
 	if (std::ranges::any_of(frequencies_, not_positive))
 	{
-		errors_.emplace_back(
+		add_error(
 			"frequencies",
 			CommandLineErrorType::list_not_positive
 		);
-		valid_ = false;
 	}
 	if (std::ranges::any_of(amplitudes_, not_positive))
 	{
-		errors_.emplace_back(
+		add_error(
 			"amplitudes",
 			CommandLineErrorType::list_not_positive
 		);
-		valid_ = false;
 	}
 	if (std::ranges::any_of(extra_values_, not_positive))
 	{
-		errors_.emplace_back(
+		add_error(
 			"extra intervals",
 			CommandLineErrorType::list_not_positive
 		);
-		valid_ = false;
 	}
 
 	if (frequencies_.size() != amplitudes_.size())
 	{
-		errors_.emplace_back(
+		add_error(
 			"frequencies and amplitudes must be the same size",
 			CommandLineErrorType::generic
 		);
-		valid_ = false;
 	}
 }
 
