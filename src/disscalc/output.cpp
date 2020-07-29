@@ -90,7 +90,15 @@ void print_usage_message(std::ostream& out)
 		"                                     positive number. The total number of\n"
 		"                                     amplitudes must match the number of\n"
 		"                                     partials, and each nth amplitude will be\n"
-		"                                     matched with the nth partial.\n";
+		"                                     matched with the nth partial.\n"
+		"  -P <number>...                     Specify the frequencies of the mobile\n"
+		"                                     partials. If not provided, use the\n"
+		"                                     stationary frequencies by default.\n"
+		"  -A <number>...                     Specify the frequencies of the mobile\n"
+		"                                     amplitudes. If not provided, use the\n"
+		"                                     stationary amplitudes by default. The\n"
+		"                                     number of mobile amplitudes must be equal\n"
+		"                                     to the number of mobile frequencies.\n";
 	out << usage_message;
 }
 
