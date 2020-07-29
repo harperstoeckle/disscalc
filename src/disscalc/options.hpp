@@ -164,6 +164,7 @@ private:
 			arg,
 			CommandLineErrorType::invalid_number
 		);
+		valid_ = false;
 	}
 
 	/*
