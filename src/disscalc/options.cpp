@@ -43,9 +43,23 @@ auto create_partials(
 }
 
 [[nodiscard]]
-auto ProgramOptions::partials(void) const noexcept -> std::vector<Partial>
+auto ProgramOptions::stable_partials(void) const -> std::vector<Partial>
 {
-	return create_partials(frequencies_, amplitudes_);
+	return create_partials(stable_frequencies_, stable_amplitudes_);
+}
+
+[[nodiscard]]
+auto ProgramOptions::mobile_partials(void) const -> std::vector<Partial>
+{
+	if (mobile_frequencies_.empty())
+	{
+		/*
+		 * TODO: Avoid doing this again when no mobile partials are
+		 * specified.
+		 */
+		return stable_partials();
+	}
+	return create_partials(mobile_frequencies_, mobile_amplitudes_);
 }
 
 [[nodiscard]]
@@ -106,13 +120,43 @@ void ProgramOptions::apply_option(ParsedOption const& parsed_option)
 	}
 	else if (flag == "-p")
 	{
-		frequencies_.reserve(frequencies_.size() + parsed_option.values.size());
-		try_insert_doubles(std::back_inserter(frequencies_), parsed_option);
+		stable_frequencies_.reserve(
+			stable_frequencies_.size() + parsed_option.values.size()
+		);
+		try_insert_doubles(
+			std::back_inserter(stable_frequencies_),
+			parsed_option
+		);
 	}
 	else if (flag == "-a")
 	{
-		amplitudes_.reserve(amplitudes_.size() + parsed_option.values.size());
-		try_insert_doubles(std::back_inserter(amplitudes_), parsed_option);
+		stable_amplitudes_.reserve(
+			stable_amplitudes_.size() + parsed_option.values.size()
+		);
+		try_insert_doubles(
+			std::back_inserter(stable_amplitudes_),
+			parsed_option
+		);
+	}
+	else if (flag == "-P")
+	{
+		mobile_frequencies_.reserve(
+			mobile_frequencies_.size() + parsed_option.values.size()
+		);
+		try_insert_doubles(
+			std::back_inserter(mobile_frequencies_),
+			parsed_option
+		);
+	}
+	else if (flag == "-A")
+	{
+		mobile_amplitudes_.reserve(
+			mobile_amplitudes_.size() + parsed_option.values.size()
+		);
+		try_insert_doubles(
+			std::back_inserter(mobile_amplitudes_),
+			parsed_option
+		);
 	}
 	else if (flag == "-x")
 	{
@@ -181,20 +225,36 @@ void ProgramOptions::validate(void)
 	}
 
 	auto const not_positive = [](double x) noexcept { return x <= 0.0; };
-	if (std::ranges::any_of(frequencies_, not_positive))
+	if (std::ranges::any_of(stable_frequencies_, not_positive))
 	{
 		add_error(
-			"frequencies",
+			"stable frequencies",
 			CommandLineErrorType::list_not_positive
 		);
 	}
-	if (std::ranges::any_of(amplitudes_, not_positive))
+	if (std::ranges::any_of(stable_amplitudes_, not_positive))
 	{
 		add_error(
-			"amplitudes",
+			"stable amplitudes",
 			CommandLineErrorType::list_not_positive
 		);
 	}
+
+	if (std::ranges::any_of(mobile_frequencies_, not_positive))
+	{
+		add_error(
+			"mobile frequencies",
+			CommandLineErrorType::list_not_positive
+		);
+	}
+	if (std::ranges::any_of(mobile_amplitudes_, not_positive))
+	{
+		add_error(
+			"mobile amplitudes",
+			CommandLineErrorType::list_not_positive
+		);
+	}
+
 	if (std::ranges::any_of(extra_values_, not_positive))
 	{
 		add_error(
@@ -203,10 +263,18 @@ void ProgramOptions::validate(void)
 		);
 	}
 
-	if (frequencies_.size() != amplitudes_.size())
+	if (stable_frequencies_.size() != stable_amplitudes_.size())
 	{
 		add_error(
-			"frequencies and amplitudes must be the same size",
+			"stable frequencies and amplitudes must be the same size",
+			CommandLineErrorType::generic
+		);
+	}
+
+	if (mobile_frequencies_.size() != mobile_amplitudes_.size())
+	{
+		add_error(
+			"mobile frequencies and amplitudes must be the same size",
 			CommandLineErrorType::generic
 		);
 	}

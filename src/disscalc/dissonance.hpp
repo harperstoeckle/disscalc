@@ -16,7 +16,9 @@ struct Partial
 /// Compute dissonance of a frequency based on a list of partials.
 [[nodiscard]]
 double compute_dissonance(
-	std::span<Partial const> partials, double interval
+	std::span<Partial const> stable_partials,
+	std::span<Partial const> mobile_partials,
+	double interval
 ) noexcept;
 } // namespace disscalc
 

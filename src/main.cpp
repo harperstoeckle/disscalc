@@ -13,12 +13,17 @@
 static
 bool output_table(disscalc::ProgramOptions const& options)
 {
-	auto const partials = options.partials();
+	auto const stable_partials = options.stable_partials();
+	auto const mobile_partials = options.mobile_partials();
 	char const separator = options.delimiter();
 
 	auto const compute_this_dissonance = [&](double d) noexcept
 	{
-		return disscalc::compute_dissonance(partials, d);
+		return disscalc::compute_dissonance(
+			stable_partials,
+			mobile_partials,
+			d
+		);
 	};
 
 	if (!options.output_file_name().has_value())

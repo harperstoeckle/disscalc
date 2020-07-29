@@ -34,19 +34,21 @@ double compute_dissonance_between_partials(Partial a, Partial b) noexcept
 
 [[nodiscard]]
 double compute_dissonance(
-	std::span<Partial const> partials, double interval
+	std::span<Partial const> stable_partials,
+	std::span<Partial const> mobile_partials,
+	double interval
 ) noexcept
 {
 	double dissonance;
-	for (auto base_partial : partials)
+	for (auto stable_partial : stable_partials)
 	{
-		for (auto raised_partial : partials)
+		for (auto mobile_partial : mobile_partials)
 		{
 			// Partial when raised by the interval.
-			raised_partial.frequency *= interval;
+			mobile_partial.frequency *= interval;
 			dissonance += compute_dissonance_between_partials(
-				base_partial,
-				raised_partial
+				stable_partial,
+				mobile_partial
 			);
 		}
 	}

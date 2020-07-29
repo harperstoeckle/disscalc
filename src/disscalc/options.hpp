@@ -94,9 +94,13 @@ public:
 		return end_;
 	}
 
-	/// Combine frequencies and amplitudes into partials.
+	/// Combine stable frequencies and amplitudes into partials.
 	[[nodiscard]]
-	auto partials(void) const noexcept -> std::vector<Partial>;
+	auto stable_partials(void) const -> std::vector<Partial>;
+
+	/// Combine mobile frequencies and amplitudes into partials.
+	[[nodiscard]]
+	auto mobile_partials(void) const -> std::vector<Partial>;
 
 	[[nodiscard]]
 	auto extra_values(void) const noexcept -> std::set<double> const&
@@ -210,8 +214,11 @@ private:
 	double delta_ = 0.01;
 	double end_ = 2.0;
 
-	std::vector<double> frequencies_;
-	std::vector<double> amplitudes_;
+	std::vector<double> stable_frequencies_;
+	std::vector<double> stable_amplitudes_;
+
+	std::vector<double> mobile_frequencies_;
+	std::vector<double> mobile_amplitudes_;
 
 	std::set<double> extra_values_;
 	

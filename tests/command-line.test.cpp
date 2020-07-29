@@ -52,7 +52,7 @@ TEST_CASE("Parse command line options", "[command-line]")
 	REQUIRE(o0.start() == Approx(1.0));
 	REQUIRE(o0.delta() == Approx(0.01));
 	REQUIRE(o0.end() == Approx(2.0));
-	REQUIRE(o0.partials().empty());
+	REQUIRE(o0.stable_partials().empty());
 	REQUIRE(o0.errors().empty());
 
 	std::vector<char const*> v1 = {
@@ -124,7 +124,7 @@ TEST_CASE("Parse command line options", "[command-line]")
 	REQUIRE(o7.start() == Approx(1.0));
 	REQUIRE(o7.delta() == Approx(0.01));
 	REQUIRE(o7.end() == Approx(2.0));
-	REQUIRE(o7.partials().empty());
+	REQUIRE(o7.stable_partials().empty());
 	REQUIRE(o7.errors().empty());
 
 	std::vector<char const*> v8 = {
@@ -133,7 +133,7 @@ TEST_CASE("Parse command line options", "[command-line]")
 		"-a", "8.7", "5.2", "9999"
 	};
 	disscalc::ProgramOptions o8(v8.size(), v8.data());
-	auto p8 = o8.partials();
+	auto p8 = o8.stable_partials();
 	REQUIRE(approx_equals(freqs_view(p8), DVec{1, 3.5, 10078.5}));
 	REQUIRE(approx_equals(amps_view(p8), DVec{8.7, 5.2, 9999}));
 
