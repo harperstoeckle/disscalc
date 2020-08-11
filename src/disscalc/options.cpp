@@ -209,6 +209,13 @@ void ProgramOptions::validate(void)
 			CommandLineErrorType::generic
 		);
 	}
+	if (start_ <= 0.0)
+	{
+		add_error(
+			"start interval",
+			CommandLineErrorType::not_positive
+		);
+	}
 	if (delta_ <= 0.0)
 	{
 		add_error(
