@@ -4,6 +4,7 @@
 #include <concepts>
 #include <functional>
 #include <iostream>
+#include <set>
 
 namespace disscalc
 {
