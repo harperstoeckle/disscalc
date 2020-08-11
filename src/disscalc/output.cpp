@@ -29,11 +29,11 @@ void print_command_line_error(std::ostream& out, CommandLineError error)
 		break;
 
 	case CommandLineErrorType::not_positive:
-		out << error.argument_text << "must be greater than zero";
+		out << error.argument_text << " must be greater than zero";
 		break;
 
 	case CommandLineErrorType::list_not_positive:
-		out << error.argument_text << "must all be greater than zero";
+		out << error.argument_text << " must all be greater than zero";
 		break;
 
 	case CommandLineErrorType::generic:
