@@ -81,7 +81,10 @@ int main(int argc, char const* argv[])
 		return 1;
 	}
 
-	output_table(options);
+	if (!output_table(options))
+	{
+		return 2;
+	}
 
 	return 0;
 }
