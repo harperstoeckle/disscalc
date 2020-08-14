@@ -6,6 +6,8 @@ project(disscalc
 	LANGUAGES CXX
 )
 
+include(cmake/warnings.cmake)
+
 add_subdirectory(src)
 
 option(
