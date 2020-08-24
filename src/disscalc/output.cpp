@@ -4,6 +4,13 @@
 
 namespace disscalc
 {
+// Get the start of an error line.
+[[nodiscard]] static
+std::string_view get_error_header(void)
+{
+	return "Disscalc Error: ";
+}
+
 void print_command_line_error(std::ostream& out, CommandLineError error)
 {
 	out << get_error_header();
@@ -100,11 +107,5 @@ void print_usage_message(std::ostream& out)
 		"                                     number of mobile amplitudes must be equal\n"
 		"                                     to the number of mobile frequencies.\n";
 	out << usage_message;
-}
-
-[[nodiscard]]
-std::string_view get_error_header(void)
-{
-	return "Disscalc Error: ";
 }
 }

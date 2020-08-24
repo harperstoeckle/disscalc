@@ -18,9 +18,6 @@ void print_generic_error(std::ostream& out, std::string_view error);
 
 /// Print the usage message to `out`.
 void print_usage_message(std::ostream& out);
-
-/// Get the start of an error line
-std::string_view get_error_header(void);
 } // namespace disscalc
 
 #endif
