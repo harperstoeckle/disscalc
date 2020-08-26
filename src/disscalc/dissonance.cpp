@@ -39,7 +39,7 @@ double compute_dissonance(
 	double interval
 ) noexcept
 {
-	double dissonance;
+	double dissonance = 0.0;
 	for (auto stable_partial : stable_partials)
 	{
 		for (auto mobile_partial : mobile_partials)
