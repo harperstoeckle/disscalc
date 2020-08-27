@@ -2,7 +2,7 @@
 cmake_minimum_required(VERSION 3.12 FATAL_ERROR)
 
 project(disscalc
-	VERSION 0.0.0
+	VERSION 1.0.0
 	LANGUAGES CXX
 )
 
