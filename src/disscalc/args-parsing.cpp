@@ -59,9 +59,10 @@ auto extract_values(std::span<char const* const>& args)
 		std::ranges::find_if(args, is_flag)
 	);
 
-	std::vector<std::string_view> values;
-	values.reserve(value_args.size());
-	std::ranges::copy(value_args, std::back_inserter(values));
+	std::vector<std::string_view> values(
+		std::cbegin(value_args),
+		std::cend(value_args)
+	);
 
 	args = args.subspan(value_args.size());
 
