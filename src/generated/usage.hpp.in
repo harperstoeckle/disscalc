@@ -1,0 +1,1 @@
+constexpr inline char const* usage_message = R"(@usage_message_content@)";

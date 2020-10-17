@@ -1,0 +1,44 @@
+Usage: disscalc [--help] [--output=<file>] [--format=<format>]
+                [--start=<number>] [--delta=<number>] [--quantity=<number>]
+                [--end=<number>] [-x <number>...] -p <number>... -a <number>...
+
+Generate a dissonance curve for the given timbre.
+
+Options:
+  -h, --help                         Display this usage and exit.
+  -o <file>, --output=<file>         Send output to the specified file.
+  -f <format>, --format=<format>     Use the specified output format. The
+                                     available formats are csv and tsv.
+  -s <number>, --start=<number>      Use the given positive number as the
+                                     (inclusive) lower bound of intervals
+                                     tested. The default is 1.0.
+  -d <number>, --delta=<number>      Use the given positive number as the
+                                     difference between each interval tested.
+                                     The default is 0.01.
+  -e <number>, --end=<number>        Use the given positive number as the
+                                     (inclusive) upper bound of intervals
+                                     tested. The default is 2.0.
+  -x <number>...                     Along with the normal range of numbers,
+                                     also compute dissonances for the intervals
+                                     specified in this option.
+  -p <number>...                     Specify the frequencies of the stationary
+                                     partials. If this option is given multiple
+                                     times, the partials are concatenated in
+                                     the order they were given. Each must be a
+                                     positive number.
+  -a <number>...                     Specify the amplitudes of the stationary
+                                     partials. If this option is given multiple
+                                     times, the amplitudes are concatenated in
+                                     the order they were given. Each must be a
+                                     positive number. The total number of
+                                     amplitudes must match the number of
+                                     partials, and each nth amplitude will be
+                                     matched with the nth partial.
+  -P <number>...                     Specify the frequencies of the mobile
+                                     partials. If not provided, use the
+                                     stationary frequencies by default.
+  -A <number>...                     Specify the frequencies of the mobile
+                                     amplitudes. If not provided, use the
+                                     stationary amplitudes by default. The
+                                     number of mobile amplitudes must be equal
+                                     to the number of mobile frequencies.
