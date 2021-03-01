@@ -42,3 +42,8 @@ target_link_libraries(disscalc
 
 enable_compile_warnings(disscalc-internal)
 enable_compile_warnings(disscalc)
+
+install(
+	TARGETS disscalc
+	RUNTIME DESTINATION bin
+)
